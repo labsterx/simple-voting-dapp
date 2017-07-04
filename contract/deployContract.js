@@ -3,3 +3,6 @@ var util = require('ethereumjs-util');
 var tx = require('ethereumjs-tx');
 var lightwallet = require('eth-lightwallet');
 var txutils = lightwallet.txutils;
+var config = require('../config');
+
+console.log(config.ethAddress);
