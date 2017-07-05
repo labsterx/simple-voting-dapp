@@ -4,7 +4,7 @@ var tx = require('ethereumjs-tx');
 var lightwallet = require('eth-lightwallet');
 var txutils = lightwallet.txutils;
 var config = require('./config');
-var utils = require('./contract-utils');
+var myUtils = require('./contract-utils');
 
 var web3 = new Web3(
     new Web3.providers.HttpProvider(config.httpProvider)
@@ -21,4 +21,4 @@ var txOptions = {
 
 var rawTx = txutils.functionTx(config.contractInterface, 'vote', [2], txOptions);
 
-utils.sendRaw(config.ethKey, rawTx);
+myUtils.sendRaw(config.ethKey, rawTx);

@@ -10,9 +10,9 @@ var web3 = new Web3(
     new Web3.providers.HttpProvider(config.httpProvider)
 );
 
-var Utils = {};
+var myUtils = {};
 
-Utils.sendRaw = function (key, rawTx) {
+myUtils.sendRaw = function (key, rawTx) {
     var privateKey = new Buffer(key, 'hex');
     var transaction = new tx(rawTx);
     transaction.sign(privateKey);
@@ -27,4 +27,4 @@ Utils.sendRaw = function (key, rawTx) {
     });
 }
 
-module.exports = Utils;
+module.exports = myUtils;

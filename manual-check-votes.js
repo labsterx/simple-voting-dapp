@@ -4,7 +4,7 @@ var tx = require('ethereumjs-tx');
 var lightwallet = require('eth-lightwallet');
 var txutils = lightwallet.txutils;
 var config = require('./config');
-var utils = require('./contract-utils');
+var myUtils = require('./contract-utils');
 
 var web3 = new Web3(
     new Web3.providers.HttpProvider(config.httpProvider)
@@ -22,11 +22,4 @@ instance.winningProposal.call(function(err, result) {
 });
 
 
-instance.winnerName.call(function(err, result) {
-    if(err) {
-        console.log(err);
-    } else {
-        console.log(result);
-    }
-});
 
