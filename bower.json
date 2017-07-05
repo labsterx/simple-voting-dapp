@@ -1,0 +1,24 @@
+{
+  "name": "simple-voting-dapp",
+  "description": "A simple voting dapp that uses a mart contract on the Ethereum blockchain to allow people to vote via a web interface.",
+  "main": "index.js",
+  "authors": [
+    "LabsterX"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "solidity",
+    "ethereum"
+  ],
+  "homepage": "https://github.com/labsterx/simple-voting-dapp",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "web3": "^0.19.0"
+  }
+}
