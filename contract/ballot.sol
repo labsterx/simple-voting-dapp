@@ -16,8 +16,11 @@ contract Ballot {
 
     Proposal[] public proposals;
 
-    function Ballot(uint8 _numProposals) {
+    function Ballot(uint _numProposals) {
         proposals.length = _numProposals;
+        for (uint p = 0; p < proposals.length; p++) {
+            proposals[p].voteCount = 0;
+        }
     }
 
     function vote(uint proposal) {
@@ -40,5 +43,12 @@ contract Ballot {
             }
         }
     }
-    
+
+    function getVoteCount(uint num) constant
+            returns (uint count)
+    {
+        count = proposals[num].voteCount;
+    }
+
+
 }

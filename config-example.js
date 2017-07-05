@@ -12,6 +12,6 @@ config.ethKey = '[Your Ethereum Private Key]';
 config.contractBytecode = '[paste contract bytecode here]';
 config.contractInterface = '[past contract interface here without quotes]';
 
-config.contractAddress = '0x081567cCC099a7961A4A00e36fce03963918B45D';
+config.contractAddress = '0x959DDFB0D641dF387569d6Efd53971c1643D4B62';
 
 module.exports = config;
