@@ -28,9 +28,10 @@
 						console.log(err);
 					}
 					else {
-						var balance = result.toNumber() / 1000000000000000000;
+						var balance = result.toNumber();
+						var etherBalance = web3.fromWei(balance, 'ether');
 						var url = 'https://rinkeby.etherscan.io/address/' + acct;
-						$('#balance-result').html(balance + ' Ether' + ' (<a href="' + url + '" target="_blank">Details</a>)');
+						$('#balance-result').html(etherBalance + ' Ether' + ' (<a href="' + url + '" target="_blank">Details</a>)');
 					}
 				});
 			});
