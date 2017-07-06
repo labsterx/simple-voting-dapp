@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Simple Voting Dapp</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet">
+	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="./bower_components/bignumber.js/bignumber.min.js"></script>
+	<script type="text/javascript" src="./bower_components/web3/dist/web3-light.js"></script>
+	<script type="text/javascript" src="./bower_components/async/dist/async.min.js"></script>
+	<script type="text/javascript">
+
+		$(document).ready(function(){
+
+			var Web3 = require('web3');
+			var web3 = new Web3();
+			web3.setProvider(new web3.providers.HttpProvider('https://rinkeby.infura.io/'));
+
+			var contractAddress = '0x959DDFB0D641dF387569d6Efd53971c1643D4B62';
+
+			var contractInterface = [{"constant":false,"inputs":[{"name":"proposal","type":"uint256"}],"name":"vote","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"proposals","outputs":[{"name":"voteCount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"winningProposal","outputs":[{"name":"winningProposal","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"voters","outputs":[{"name":"voted","type":"bool"},{"name":"vote","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"num","type":"uint256"}],"name":"getVoteCount","outputs":[{"name":"count","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[{"name":"_numProposals","type":"uint256"}],"payable":false,"type":"constructor"}];
+
+			var contract = web3.eth.contract(contractInterface);
+			var instance = contract.at(contractAddress);
+
+			var nameList = ['Americano', 'Cappuccino', 'Espresso', 'Flat White', 'Latte', 'Mocha'];
+			var votes = {};
+			for (var i=0; i<nameList.length; i++) {
+				var name = nameList[i];
+				votes[name] = null;
+			}
+
+			loadResults();
+
+			$('#refresh').click(function(){
+				loadResults();
+			});
+
+			$('#vote-modal').on('show.bs.modal', function (event) {
+				var button = $(event.relatedTarget);
+				var name = button.data('name');
+				var modal = $(this);
+				modal.find('#modal-name').text(name);
+			});
+			
+			function loadResults() {
+				$('#vote-tbody').html('');
+				$('#vote-loading').show();
+
+				async.forEachOf(nameList,
+					function(name, i, callback) {
+						instance.getVoteCount.call(i, function(err, result) {
+							if(err) {
+								console.log(err);
+								callback();
+							} else {
+								// console.log(name + ': ' + result.toNumber());
+								var n = result.toNumber();
+								votes[name] = n;
+								callback();
+							}
+						});
+					},
+					function(error) {
+						// console.log(error);
+						console.log(votes);
+						$('#vote-loading').hide();
+						var html = '';
+						for (var i=0; i<nameList.length; i++) {
+							var name = nameList[i];
+							var voteCount = votes[name];
+							html += "<tr>\n";
+							html += "<td class='name'><strong>" + name + "</trong></td>";
+							html += "<td class='text-center'><span class='vote-count'>" + voteCount + "</span></td>";
+							html += "<td><div data-toggle='modal' data-target='#vote-modal' data-id='" + i + "' data-name='" + name + "' class='btn btn-success' href='' id='vote-" + i + "'>Vote</div></td>"
+							html += "</tr>\n";
+						}
+						// console.log(html);
+						$('#vote-tbody').html(html);
+					}
+				);
+			}
+
+
+		});
+
+	</script>
+	<style>
+		.name {
+			font-size: 1.5em;
+			font-weight: bold;
+		}
+		.vote-count {
+			background-color: #78b8de;
+		   color: #FFF;
+		   font-size: 1.5em;
+		   font-weight: bold;
+		   padding: 4px 15px;
+		   border-radius: 4px;
+		}
+	</style>
+  </head>
+  <body>
+	<div class="container">
+
+		<div id="vote">
+
+			<h3 class="text-center" style="margin-bottom: 20px">Vote</h3>
+
+			<div class="text-center" style="margin-bottom: 40px"><div class="btn btn-default" id="refresh">Refresh</div></div>
+
+			<div class="text-center" id="vote-loading">Loading...</div>
+			<table class="table table-hover">
+			<tbody id="vote-tbody">
+
+			</tbody>
+			</table>
+
+		</div>
+
+
+	</div><!-- container -->
+
+
+<!-- BEGIN VOTE Modal -->
+<div class="modal fade" id="vote-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	<div class="modal-dialog modal-lg" role="document">	
+		<div class="modal-content">
+			<div class="modal-body" style="padding: 20px 30px">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Vote for <span id="modal-name"></span></h4>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END VOTE Modal -->
+
+
+
+  </body>
+</html>
+
