@@ -14,13 +14,13 @@ var web3 = new Web3(
 var contract = web3.eth.contract(config.contractInterface);
 var instance = contract.at(config.contractAddress);
 
-// instance.winningProposal.call(function(err, result) {
-//     if(err) {
-//         console.log(err);
-//     } else {
-//         console.log('The Winner is No. ' + result.toNumber());
-//     }
-// });
+instance.winningProposal.call(function(err, result) {
+    if(err) {
+        console.log(err);
+    } else {
+        console.log('The Winner is No. ' + result.toNumber());
+    }
+});
 
 var votes = {};
 for (var i=0; i<config.nameList.length; i++) {
