@@ -18,9 +18,28 @@
 
 		$(document).ready(function(){
 
-			var Web3 = require('web3');
-			var web3 = new Web3();
-			web3.setProvider(new web3.providers.HttpProvider('https://rinkeby.infura.io/'));
+
+			var METAMASK_error = '<div style="color: red">Please use the METAMASK plugin to connect to the Rinkeby testnet and log in an account</div>';
+			$(".modal-metamask-error").hide();
+			$('#default-account-div').hide();
+
+			if (typeof web3 !== 'undefined') {
+				console.log('already have web3');
+				web3 = new Web3(web3.currentProvider);
+			}
+			else {
+				web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/'))
+			}
+
+			var defaultAccount = web3.eth.defaultAccount;
+			if (defaultAccount) {
+				$('#default-account').text(defaultAccount);
+				$('#default-account-div').show();
+			}
+			else {
+				$('.modal-metamask-error').html(METAMASK_error);
+				$(".modal-metamask-error").show();
+			}
 
 			var contractAddress = '0x959DDFB0D641dF387569d6Efd53971c1643D4B62';
 
@@ -48,7 +67,7 @@
 				var modal = $(this);
 				modal.find('#modal-name').text(name);
 			});
-			
+
 			function loadResults() {
 				$('#vote-tbody').html('');
 				$('#vote-loading').show();
@@ -87,6 +106,10 @@
 				);
 			}
 
+			function sendVote(index) {
+
+			}
+
 
 		});
 
@@ -98,11 +121,16 @@
 		}
 		.vote-count {
 			background-color: #78b8de;
-		   color: #FFF;
-		   font-size: 1.5em;
-		   font-weight: bold;
-		   padding: 4px 15px;
-		   border-radius: 4px;
+			color: #FFF;
+			font-size: 1.5em;
+			font-weight: bold;
+			padding: 4px 15px;
+			border-radius: 4px;
+		}
+		.modal-metamask-error {
+			color: red;
+			margin: 5px auto;
+			text-align: center;
 		}
 	</style>
   </head>
@@ -112,6 +140,10 @@
 		<div id="vote">
 
 			<h3 class="text-center" style="margin-bottom: 20px">Vote</h3>
+
+			<div id="default-account-div" class="text-center" style="margin-bottom: 20px"><strong>Your Account:</strong> <span id="default-account"></span></div>
+
+			<div class="modal-metamask-error" style="margin-bottom: 20px"></div>
 
 			<div class="text-center" style="margin-bottom: 40px"><div class="btn btn-default" id="refresh">Refresh</div></div>
 
@@ -130,11 +162,12 @@
 
 <!-- BEGIN VOTE Modal -->
 <div class="modal fade" id="vote-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-	<div class="modal-dialog modal-lg" role="document">	
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-body" style="padding: 20px 30px">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Vote for <span id="modal-name"></span></h4>
+				<div class="modal-metamask-error"></div>
 			</div>
 		</div>
 	</div>

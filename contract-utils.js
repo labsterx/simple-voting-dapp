@@ -1,9 +1,9 @@
 // This is the configuration file to store information such as public key and private key etc.
 var Web3 = require('web3');
-var util = require('ethereumjs-util');
+// var util = require('ethereumjs-util');
 var tx = require('ethereumjs-tx');
 var lightwallet = require('eth-lightwallet');
-var txutils = lightwallet.txutils;
+// var txutils = lightwallet.txutils;
 var config = require('./config');
 
 var web3 = new Web3(
