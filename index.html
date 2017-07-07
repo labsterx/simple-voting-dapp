@@ -33,17 +33,7 @@
 				web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/'))
 			}
 
-			var defaultAccount = web3.eth.defaultAccount;
-			if (defaultAccount) {
-				var defaultAccountStr = '<a href="https://rinkeby.etherscan.io/address/' + defaultAccount +
-					'" target="_blank">' + defaultAccount + '</a>';
-				$('#default-account').html(defaultAccountStr);
-				$('#default-account-div').show();
-			}
-			else {
-				$('.modal-metamask-error').html(METAMASK_error);
-				$(".modal-metamask-error").show();
-			}
+			checkMetaMakeInsert();
 
 			var contractAddress = '0x959DDFB0D641dF387569d6Efd53971c1643D4B62';
 			var contractURL = 'https://rinkeby.etherscan.io/address/' + contractAddress;
@@ -74,7 +64,14 @@
 				vote_index = button.data('id');
 				var modal = $(this);
 				modal.find('#modal-name').text(name);
-				$("#send-vote").show();
+				if (checkMetaMakeInsert()) {
+					console.log('inserted: ' + web3.eth.defaultAccount);
+					$("#send-vote").show();
+				}
+				else {
+					console.log('not inserted.');
+					$("#send-vote").hide();
+				}
 				$('#vote-result-str').html();
 			});
 
@@ -83,6 +80,22 @@
 				$("#send-vote").prop("disabled",true);
 				sendVote(vote_index);
 			});
+
+			function checkMetaMakeInsert() {
+				var defaultAccount = web3.eth.defaultAccount;
+				if (defaultAccount) {
+					var defaultAccountStr = '<a href="https://rinkeby.etherscan.io/address/' + defaultAccount +
+						'" target="_blank">' + defaultAccount + '</a>';
+					$('#default-account').html(defaultAccountStr);
+					$('#default-account-div').show();
+					return true;
+				}
+				else {
+					$('.modal-metamask-error').html(METAMASK_error);
+					$(".modal-metamask-error").show();
+					return false;
+				}
+			}
 
 			function loadResults() {
 				$('#vote-tbody').html('');
