@@ -8,10 +8,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
 	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="./bower_components/bignumber.js/bignumber.min.js"></script>
-	<script type="text/javascript" src="./bower_components/web3/dist/web3-light.js"></script>
+	<script type="text/javascript" src="./bower_components/web3/dist/web3-light.min.js"></script>
 	<script type="text/javascript">
 
 		$(document).ready(function(){
@@ -41,6 +42,19 @@
 	</script>
   </head>
   <body>
+
+ 	<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+	 <div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Solidity & Web3.js Test</a>
+	 </div>
+	 <ul class="nav navbar-nav">
+		<li><a href="index.html">Simple Voting Dapp</a></li>
+		<li><a href="tools.html">Tools</a></li>
+	 </ul>
+	</div>
+	</nav>
+	 
 	<div class="container">
 	
 
@@ -48,7 +62,7 @@
 
 			<h3>Check Balance</h3>
 
-				<div><strong>Account:</strong> (e.g. 0xEa88AcB753911f4d03f1c8FFefC454Af0DEe737D)</div>
+				<div style="margin: 10px 0"><strong>Account:</strong> (e.g. 0xEa88AcB753911f4d03f1c8FFefC454Af0DEe737D)</div>
 				<div class="row">
 					<div class="col-xs-7">
 						<input type="text" class="form-control" id="balance-account" placeholder="0xEa88AcB753911f4d03f1c8FFefC454Af0DEe737D" style="width: 420px" required="required">
@@ -58,7 +72,7 @@
 					</div>
 			  </div>
 
-				<div><strong>Balance:</strong> <span id='balance-result'></span> </div>
+				<div style="margin: 10px 0"><strong>Balance:</strong> <span id='balance-result'></span> </div>
 
 		</div>
 

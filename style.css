@@ -1,0 +1,25 @@
+.navbar-inverse {
+	border-radius: 0 !important;
+	border: 0 !important;
+}
+h2 {
+	font-weight: bold;
+	color: #4ba24b;
+}
+.name {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+.vote-count {
+	background-color: #78b8de;
+	color: #FFF;
+	font-size: 1.5em;
+	font-weight: bold;
+	padding: 4px 15px;
+	border-radius: 4px;
+}
+.modal-metamask-error {
+	color: red;
+	margin: 5px auto;
+	text-align: center;
+}

@@ -7,24 +7,26 @@
 	<title>Simple Voting Dapp</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="style.css">
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css" rel="stylesheet">
 	<script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="./bower_components/bignumber.js/bignumber.min.js"></script>
-	<script type="text/javascript" src="./bower_components/web3/dist/web3-light.js"></script>
+	<script type="text/javascript" src="./bower_components/web3/dist/web3-light.min.js"></script>
 	<script type="text/javascript" src="./bower_components/async/dist/async.min.js"></script>
-	<script type="text/javascript" src="./node_modules/eth-lightwallet/dist/lightwallet.min.js"></script>
+<!-- 	<script type="text/javascript" src="./node_modules/eth-lightwallet/dist/lightwallet.min.js"></script> -->
 	<script type="text/javascript">
 
 		$(document).ready(function(){
 
+			var vote_index = null;
 
 			var METAMASK_error = '<div style="color: red">Please use the METAMASK plugin to connect to the Rinkeby testnet and log in an account</div>';
 			$(".modal-metamask-error").hide();
 			$('#default-account-div').hide();
 
 			if (typeof web3 !== 'undefined') {
-				console.log('already have web3');
+				// console.log('already have web3');
 				web3 = new Web3(web3.currentProvider);
 			}
 			else {
@@ -33,7 +35,9 @@
 
 			var defaultAccount = web3.eth.defaultAccount;
 			if (defaultAccount) {
-				$('#default-account').text(defaultAccount);
+				var defaultAccountStr = '<a href="https://rinkeby.etherscan.io/address/' + defaultAccount +
+					'" target="_blank">' + defaultAccount + '</a>';
+				$('#default-account').html(defaultAccountStr);
 				$('#default-account-div').show();
 			}
 			else {
@@ -42,6 +46,8 @@
 			}
 
 			var contractAddress = '0x959DDFB0D641dF387569d6Efd53971c1643D4B62';
+			var contractURL = 'https://rinkeby.etherscan.io/address/' + contractAddress;
+			$('#contract-link').attr("href", contractURL);
 
 			var contractInterface = [{"constant":false,"inputs":[{"name":"proposal","type":"uint256"}],"name":"vote","outputs":[],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"proposals","outputs":[{"name":"voteCount","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[],"name":"winningProposal","outputs":[{"name":"winningProposal","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"voters","outputs":[{"name":"voted","type":"bool"},{"name":"vote","type":"uint256"}],"payable":false,"type":"function"},{"constant":true,"inputs":[{"name":"num","type":"uint256"}],"name":"getVoteCount","outputs":[{"name":"count","type":"uint256"}],"payable":false,"type":"function"},{"inputs":[{"name":"_numProposals","type":"uint256"}],"payable":false,"type":"constructor"}];
 
@@ -58,14 +64,24 @@
 			loadResults();
 
 			$('#refresh').click(function(){
-				loadResults();
+				// loadResults();
+				location.reload();
 			});
 
 			$('#vote-modal').on('show.bs.modal', function (event) {
 				var button = $(event.relatedTarget);
 				var name = button.data('name');
+				vote_index = button.data('id');
 				var modal = $(this);
 				modal.find('#modal-name').text(name);
+				$("#send-vote").show();
+				$('#vote-result-str').html();
+			});
+
+			$('#send-vote').click(function(){
+				// alert('will vote for ' + vote_index);
+				$("#send-vote").prop("disabled",true);
+				sendVote(vote_index);
 			});
 
 			function loadResults() {
@@ -95,7 +111,7 @@
 							var name = nameList[i];
 							var voteCount = votes[name];
 							html += "<tr>\n";
-							html += "<td class='name'><strong>" + name + "</trong></td>";
+							html += "<td class='name'><strong>" + name + "</trong></td>";{}
 							html += "<td class='text-center'><span class='vote-count'>" + voteCount + "</span></td>";
 							html += "<td><div data-toggle='modal' data-target='#vote-modal' data-id='" + i + "' data-name='" + name + "' class='btn btn-success' href='' id='vote-" + i + "'>Vote</div></td>"
 							html += "</tr>\n";
@@ -108,38 +124,46 @@
 
 			function sendVote(index) {
 
+				$('#vote-result-str').html('... ...');
+
+				instance.vote(index, {}, function(err, result) {
+					if (err) {
+						console.log(err);
+					}
+					else {
+						console.log(result);
+						var resultStr = 'Vote Sent! See Details: <a href="https://rinkeby.etherscan.io/tx/' + result + '" target=_blank>' + result + '</a>';
+
+						$('#vote-result-str').html(resultStr);
+					}
+				});
+
 			}
 
 
 		});
 
 	</script>
-	<style>
-		.name {
-			font-size: 1.5em;
-			font-weight: bold;
-		}
-		.vote-count {
-			background-color: #78b8de;
-			color: #FFF;
-			font-size: 1.5em;
-			font-weight: bold;
-			padding: 4px 15px;
-			border-radius: 4px;
-		}
-		.modal-metamask-error {
-			color: red;
-			margin: 5px auto;
-			text-align: center;
-		}
-	</style>
   </head>
   <body>
+
+	<nav class="navbar navbar-inverse">
+	<div class="container-fluid">
+	 <div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Solidity & Web3.js Test</a>
+	 </div>
+	 <ul class="nav navbar-nav">
+		<li><a href="index.html">Simple Voting Dapp</a></li>
+		<li><a href="tools.html">Tools</a></li>
+	 </ul>
+	</div>
+	</nav>
+
 	<div class="container">
 
 		<div id="vote">
 
-			<h3 class="text-center" style="margin-bottom: 20px">Vote</h3>
+			<h2 class="text-center" style="margin-bottom: 20px">Vote For Your Favourite Coffee</h2>
 
 			<div id="default-account-div" class="text-center" style="margin-bottom: 20px"><strong>Your Account:</strong> <span id="default-account"></span></div>
 
@@ -153,6 +177,11 @@
 
 			</tbody>
 			</table>
+
+			<div class="text-center" style="margin: 20px">
+				<a id="contract-link" href="" target="_blank">View Smart Contract</a> |
+				<a href="https://github.com/labsterx/simple-voting-dapp" target="_blank">Source Code</a>
+			</div>
 
 		</div>
 
@@ -168,6 +197,10 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Vote for <span id="modal-name"></span></h4>
 				<div class="modal-metamask-error"></div>
+				<div class="text-center">
+					<btn class="btn btn-success" id="send-vote">Vote Now!</btn>
+					<div id="vote-result-str" style="margin: 20px"></div>
+				</div>
 			</div>
 		</div>
 	</div>
