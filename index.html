@@ -33,8 +33,6 @@
 				web3 = new Web3(new Web3.providers.HttpProvider('https://rinkeby.infura.io/'))
 			}
 
-			checkMetaMakeInsert();
-
 			var contractAddress = '0x959DDFB0D641dF387569d6Efd53971c1643D4B62';
 			var contractURL = 'https://rinkeby.etherscan.io/address/' + contractAddress;
 			$('#contract-link').attr("href", contractURL);
@@ -52,6 +50,8 @@
 			}
 
 			loadResults();
+
+			checkMetaMakeInsert();
 
 			$('#refresh').click(function(){
 				// loadResults();
