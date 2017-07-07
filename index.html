@@ -82,6 +82,8 @@
 			});
 
 			function checkMetaMakeInsert() {
+				$(".modal-metamask-error").hide();
+				$('#default-account-div').hide();
 				var defaultAccount = web3.eth.defaultAccount;
 				if (defaultAccount) {
 					var defaultAccountStr = '<a href="https://rinkeby.etherscan.io/address/' + defaultAccount +
@@ -182,10 +184,6 @@
 
 			<h2 class="text-center" style="margin-bottom: 20px">Vote For Your Favourite Coffee</h2>
 
-			<div id="default-account-div" class="text-center" style="margin-bottom: 20px"><strong>Your Account:</strong> <span id="default-account"></span></div>
-
-			<div class="modal-metamask-error" style="margin-bottom: 20px"></div>
-
 			<div class="text-center" style="margin-bottom: 40px"><div class="btn btn-default" id="refresh">Refresh</div></div>
 
 			<div class="text-center" id="vote-loading">Loading...</div>
@@ -213,6 +211,7 @@
 			<div class="modal-body" style="padding: 20px 30px">
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Vote for <span id="modal-name"></span></h4>
+				<div id="default-account-div" class="text-center" style="margin: 20px"><strong>Your Account:</strong> <span id="default-account"></span></div>
 				<div class="modal-metamask-error"></div>
 				<div class="text-center">
 					<btn class="btn btn-success" id="send-vote">Vote Now!</btn>
