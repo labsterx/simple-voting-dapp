@@ -88,9 +88,13 @@
 						'" target="_blank">' + defaultAccount + '</a>';
 					$('#default-account').html(defaultAccountStr);
 					$('#default-account-div').show();
+					$('.modal-metamask-error').html();
+					$(".modal-metamask-error").hide();
 					return true;
 				}
 				else {
+					$('#default-account').html();
+					$('#default-account-div').hide();					
 					$('.modal-metamask-error').html(METAMASK_error);
 					$(".modal-metamask-error").show();
 					return false;
